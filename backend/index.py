@@ -11,8 +11,19 @@ from backend.database import Base, engine, get_db
 from backend.model import PostModel
 from backend.schema import PostCreate, PostResponse, PostHomeResponse, PostPatch
 
+
 app = FastAPI()
 Base.metadata.create_all(bind=engine)
+
+
+from fastapi.middleware.cors import CORSMiddleware
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
 
 while True:
     try :
@@ -28,17 +39,24 @@ while True:
         time.sleep(2)
 
 @app.get("/", response_model=list[PostHomeResponse])
-def home_page(db: Session = Depends(get_db), limit: int = 10, offset: int = 5):
-    screen = db.query(
+def home_page(db: Session = Depends(get_db), limit: int = 10, offset: int = 0):    
+    post = db.query(
         PostModel.id,
         PostModel.title,
         func.substring(PostModel.content, 1, 10).label("snippet"),
-        PostModel.created_at).limit(limit).all()
-    return(screen)
+        PostModel.created_at).filter(PostModel.published == True).limit(limit).all()
+    
+    if not post:
+        raise HTTPException(
+            status_code = status.HTTP_404_NOT_FOUND,
+            detail= "No published posts found"
+        )
+
+    return(post)
 
 @app.get("/posts", response_model=list[PostResponse])
 def get_posts(db: Session = Depends(get_db)):
-    posts = db.query(PostModel).all()
+    posts = db.query(PostModel).filter(PostModel.published==True).all()
     return posts
 
 @app.get("/posts/{id}")
