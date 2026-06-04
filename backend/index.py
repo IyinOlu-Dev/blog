@@ -1,22 +1,18 @@
 from fastapi import FastAPI, Body, Response, status, HTTPException, Depends
-# from pydantic import BaseModel, Field
-# from random import randrange
 from uuid import UUID
 from sqlalchemy import func
 import psycopg2
 import time
 from psycopg2.extras import RealDictCursor
-
-
 from sqlalchemy.orm import Session
-from database import Base, engine, get_db
-from model import PostModel
-from schema import PostCreate, PostResponse, PostHomeResponse, PostPatch
+
+
+from backend.database import Base, engine, get_db
+from backend.model import PostModel
+from backend.schema import PostCreate, PostResponse, PostHomeResponse, PostPatch
 
 app = FastAPI()
 Base.metadata.create_all(bind=engine)
-
-
 
 while True:
     try :

@@ -3,7 +3,7 @@ from uuid import UUID
 import uuid
 from sqlalchemy import Numeric, text
 from datetime import datetime
-from database import Base
+from backend.database import Base
 from sqlalchemy.orm import Mapped, mapped_column
 
 
