@@ -8,8 +8,8 @@ from sqlalchemy.orm import Session
 
 
 from backend.database import Base, engine, get_db
-from backend.model import PostModel
-from backend.schema import PostCreate, PostResponse, PostHomeResponse, PostPatch
+from backend.model import PostModel, UserModel
+from backend.schema import PostCreate, PostResponse, PostHomeResponse, PostPatch, CreateUser, UserResponse
 
 
 app = FastAPI()
@@ -108,3 +108,15 @@ def update_post(id:UUID, post_update:PostPatch, db:Session = Depends(get_db)):
     post_query.update(post_update.model_dump(exclude_unset = True), synchronize_session = "fetch")
     db.commit()
     return post_query.first()
+
+
+# ----- User Path-----#
+
+
+@app.post("/new_user", status_code=status.HTTP_201_CREATED, response_model= UserResponse)
+def create_user(post:CreateUser, db: Session = Depends(get_db)):
+    new_user = UserModel(**post.model_dump()) 
+    db.add(new_user)
+    db.commit()
+    db.refresh(new_user)
+    return (new_user)

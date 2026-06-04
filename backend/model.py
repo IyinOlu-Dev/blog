@@ -18,7 +18,7 @@ class PostModel(Base):
     created_at: Mapped[datetime] = mapped_column(server_default=text("now()"))
     
     
-class User(Base):
+class UserModel(Base):
     __tablename__ = "user"
     
     id: Mapped[UUID] =  mapped_column(primary_key= True, index=True, default=uuid.uuid4, unique= True, nullable=False )

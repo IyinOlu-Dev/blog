@@ -32,3 +32,19 @@ class PostPatch(BaseModel):
     content: str | None = None
     published: bool |None = None
     rating : Optional[Decimal] = Field(default= None, max_digits=4, decimal_places=2 )
+    
+    # -----User Database----#  
+    
+class CreateUser(BaseModel):
+    username: str 
+    email: str
+    password: str
+    
+class UserResponse(BaseModel):
+    id: UUID
+    username: str 
+    email: str
+    created_at: datetime
+
+    class Config:
+        from_attributes=True
