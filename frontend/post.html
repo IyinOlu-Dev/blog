@@ -3,40 +3,44 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Posts</title>
+  <title>Post</title>
   <script src="https://cdn.tailwindcss.com"></script>
 </head>
 <body class="bg-gray-100 min-h-screen p-8">
 
-  <!-- Header -->
   <div class="max-w-2xl mx-auto">
-    <h1 class="text-3xl font-bold text-gray-900 mb-6">Posts</h1>
 
-    <!-- Create Form -->
-    <div class="bg-white rounded-xl shadow p-6 mb-8">
-      <h2 class="text-lg font-semibold text-gray-700 mb-4">New Post</h2>
+    <!-- Back link -->
+    <a href="index.html" class="text-blue-600 hover:underline text-sm mb-6 inline-block">
+      ← Back to Posts
+    </a>
+
+    <!-- Post content (filled by JS) -->
+    <div id="post" class="bg-white rounded-xl shadow p-6 mb-6"></div>
+
+    <!-- Edit Form -->
+    <div class="bg-white rounded-xl shadow p-6">
+      <h2 class="text-lg font-semibold text-gray-700 mb-4">Edit Post</h2>
       <input
-        id="title"
+        id="edit-title"
         type="text"
-        placeholder="Title"
+        placeholder="New title"
         class="w-full border border-gray-300 rounded-lg px-4 py-2 mb-3 focus:outline-none focus:ring-2 focus:ring-blue-500"
       >
       <textarea
-        id="content"
-        placeholder="Content"
+        id="edit-content"
+        placeholder="New content"
         rows="4"
         class="w-full border border-gray-300 rounded-lg px-4 py-2 mb-3 focus:outline-none focus:ring-2 focus:ring-blue-500"
       ></textarea>
       <button
-        onclick="createPost()"
-        class="bg-blue-600 text-white px-6 py-2 rounded-lg hover:bg-blue-700 transition"
+        onclick="updatePost()"
+        class="bg-yellow-500 text-white px-6 py-2 rounded-lg hover:bg-yellow-600 transition"
       >
-        Create
+        Update
       </button>
     </div>
 
-    <!-- Post List -->
-    <div id="posts" class="space-y-4"></div>
   </div>
 
   <script src="app.js"></script>
