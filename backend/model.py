@@ -16,3 +16,15 @@ class PostModel(Base):
     published: Mapped[bool] = mapped_column(server_default=text("False"))
     rating: Mapped[Decimal] = mapped_column(Numeric(precision=4, scale=2))
     created_at: Mapped[datetime] = mapped_column(server_default=text("now()"))
+    
+    
+class User(Base):
+    __tablename__ = "user"
+    
+    id: Mapped[UUID] =  mapped_column(primary_key= True, index=True, default=uuid.uuid4, unique= True, nullable=False )
+    username: Mapped[str]
+    email: Mapped[str] = mapped_column( unique= True, nullable=False)
+    password: Mapped[str] = mapped_column(nullable=False)
+    created_at: Mapped[datetime] = mapped_column(server_default=text("now()"))
+    
+    
