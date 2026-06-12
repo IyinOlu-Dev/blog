@@ -1,4 +1,4 @@
-from pydantic import BaseModel, Field
+from pydantic import BaseModel, Field, EmailStr
 from datetime import datetime
 from typing import Optional
 from decimal import Decimal
@@ -14,6 +14,7 @@ class PostCreate(BaseModel):
 class PostResponse(PostCreate):
     id:UUID
     created_at: datetime
+    user_id: UUID
     
     class Config:
         from_attributes = True
@@ -37,7 +38,7 @@ class PostPatch(BaseModel):
     
 class CreateUser(BaseModel):
     username: str 
-    email: str
+    email: EmailStr
     password: str
     
 class UserResponse(BaseModel):
@@ -48,3 +49,14 @@ class UserResponse(BaseModel):
 
     class Config:
         from_attributes=True
+        
+class LoginRequest(BaseModel):
+    identifier: str
+    password: str
+    
+
+class UserPosts(UserResponse):
+    posts: list[PostResponse] = []
+    
+    class Config:
+        from_attributes = True
