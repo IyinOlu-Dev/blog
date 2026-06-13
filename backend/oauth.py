@@ -1,3 +1,6 @@
+import os
+from dotenv import load_dotenv
+
 from jose import JWTError, jwt
 from datetime import datetime, timedelta, timezone
 from fastapi import Depends, HTTPException, status
@@ -7,7 +10,9 @@ from sqlalchemy.orm import Session
 from backend.database import get_db
 from backend.model import UserModel
 
-SECRET_KEY = "secret key"
+load_dotenv()
+
+SECRET_KEY = os.getenv("SECRET_KEY")
 ALGORITHM = "HS256"
 ACESS_TOKEN_EXPIRE_MINUTES = 60
 

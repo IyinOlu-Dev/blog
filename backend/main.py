@@ -25,8 +25,8 @@ app.add_middleware(
 
 @app.get("/posts", response_model=list[PostResponse])
 def get_posts(db: Session = Depends(get_db),
-              limit: int = 10,
-              offset: int = 0):
+                limit: int = 10,
+                offset: int = 0):
     
     posts = db.query(PostModel).filter(PostModel.published==True).offset(offset).limit(limit).all()
     return posts
@@ -129,8 +129,8 @@ def login(credentials: LoginRequest, db: Session = Depends(get_db)):
 
 @app.get("/user/posts/{id}", response_model=UserPosts)
 def get_user_posts_history(id: UUID, 
-                           db: Session= Depends(get_db),
-                           current_user: UserModel= Depends(get_current_user)):
+                            db: Session= Depends(get_db),
+                            current_user: UserModel= Depends(get_current_user)):
     
     user_query = db.query(UserModel).filter(UserModel.id == id)
     user = user_query.first()
@@ -151,8 +151,8 @@ def get_user_posts_history(id: UUID,
 
 @app.get("/user/{id}", response_model=UserResponse)
 def get_user_history(id: UUID, 
-                           db: Session= Depends(get_db),
-                           current_user: UserModel= Depends(get_current_user)):
+                    db: Session= Depends(get_db),
+                    current_user: UserModel= Depends(get_current_user)):
     
     user_query = db.query(UserModel).filter(UserModel.id == id)
     user = user_query.first()
