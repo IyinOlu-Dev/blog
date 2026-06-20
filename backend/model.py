@@ -13,14 +13,14 @@ class PostModel(Base):
     id: Mapped[UUID] = mapped_column(primary_key=True, index= True, default=uuid.uuid4)
     title: Mapped[str | None]
     content: Mapped[str | None] 
-    published: Mapped[bool | None] = mapped_column(server_default=text("False"))
-    rating: Mapped[Decimal | None] = mapped_column(Numeric(precision=4, scale=2))
+    published: Mapped[bool | None] = mapped_column(server_default=text("false"), default=False)
+    likes: Mapped[int | None]
     created_at: Mapped[datetime] = mapped_column(server_default=text("now()"))
-    user_id: Mapped[UUID] = mapped_column(ForeignKey("user.id"), nullable =False)
+    user_id: Mapped[UUID] = mapped_column(ForeignKey("user_table.id"), nullable =False, index=True)
     owner: Mapped["UserModel"] = relationship("UserModel", back_populates="posts")
     
 class UserModel(Base):
-    __tablename__ = "user"
+    __tablename__ = "user_table"
     
     id: Mapped[UUID] =  mapped_column(primary_key= True, index=True, default=uuid.uuid4, unique= True, nullable=False )
     username: Mapped[str | None] = mapped_column(unique=True)
@@ -29,3 +29,7 @@ class UserModel(Base):
     created_at: Mapped[datetime] = mapped_column(server_default=text("now()"))
     posts: Mapped[list["PostModel"]] = relationship("PostModel", back_populates="owner")
     
+class LikedModel(Base):
+    __tablename__ = "likes"    
+    post_id: Mapped[UUID] = mapped_column(ForeignKey("post_table.id", ondelete="CASCADE"), primary_key=True)
+    user_id: Mapped[UUID] = mapped_column(ForeignKey("user_table.id", ondelete="CASCADE"), primary_key=True)

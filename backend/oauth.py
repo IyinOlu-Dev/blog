@@ -1,5 +1,6 @@
 import os
 from dotenv import load_dotenv
+from uuid import UUID
 
 from jose import JWTError, jwt
 from datetime import datetime, timedelta, timezone
@@ -45,7 +46,7 @@ def get_current_user(token: str = Depends(oauth2_scheme), db: Session= Depends(g
     except JWTError:
         raise credentials_exception
     
-    user= db.query(UserModel). filter(UserModel.id == user_id).first()
+    user= db.query(UserModel). filter(UserModel.id == UUID(user_id)).first()
     
     if user is None:
         raise credentials_exception
