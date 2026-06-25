@@ -2,6 +2,7 @@ from fastapi import FastAPI, Body, Response, status, HTTPException, Depends
 from uuid import UUID
 import time
 from sqlalchemy.orm import Session
+from sqlalchemy import select
 
 from backend.database import Base, engine, get_db
 from backend.model import PostModel, UserModel, LikedModel
@@ -27,9 +28,11 @@ app.add_middleware(
 
 @app.get("/", response_model= list[PostHomeResponse])
 def home_page(db: Session = Depends(get_db),
-              ):
-    
-    posts = db.query(PostModel).all()
+              limit= 10,
+              offset= 0):
+    limit = min(limit, 50)
+    post_query = select(PostModel).offset(offset).limit(limit)
+    posts = db.scalars(post_query).all()
     return posts
 
 @app.get("/posts", response_model=list[PostResponse])
