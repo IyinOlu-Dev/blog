@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Social App - Authenticate</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-100 min-h-screen font-sans flex flex-col">
+
+    <nav class="bg-blue-600 text-white shadow-md w-full">
+        <div class="max-w-6xl mx-auto px-4 py-3">
+            <a href="index.html" class="text-2xl font-bold tracking-tight">FastAPI Social</a>
+        </div>
+    </nav>
+
+    <main class="flex-grow flex items-center justify-center p-4">
+        <div class="bg-white p-8 rounded-lg shadow-md max-w-md w-full">
+            <h2 id="auth-title" class="text-2xl font-bold mb-6 text-gray-800 text-center">Login</h2>
+            
+            <div id="alert-box" class="hidden mb-4 p-3 rounded text-sm text-center font-semibold"></div>
+
+            <form id="auth-form" onsubmit="handleAuthSubmit(event)">
+                <div id="username-group" class="mb-4 hidden">
+                    <label class="block text-gray-700 font-medium mb-1">Username</label>
+                    <input type="text" id="auth-username" class="w-full border rounded p-2 focus:outline-none focus:ring-2 focus:ring-blue-500">
+                </div>
+                
+                <div class="mb-4">
+                    <label id="identifier-label" class="block text-gray-700 font-medium mb-1">Username or Email</label>
+                    <input type="text" id="auth-identifier" required class="w-full border rounded p-2 focus:outline-none focus:ring-2 focus:ring-blue-500">
+                </div>
+                
+                <div class="mb-6">
+                    <label class="block text-gray-700 font-medium mb-1">Password</label>
+                    <input type="password" id="auth-password" required class="w-full border rounded p-2 focus:outline-none focus:ring-2 focus:ring-blue-500">
+                </div>
+                
+                <button type="submit" id="auth-submit-btn" class="w-full bg-blue-600 text-white p-2 rounded font-semibold hover:bg-blue-700 transition">
+                    Sign In
+                </button>
+            </form>
+
+            <p class="mt-6 text-center text-sm text-gray-600">
+                <span id="auth-toggle-text">Don't have an account?</span> 
+                <button onclick="toggleAuthMode()" class="text-blue-600 underline font-medium ml-1">Switch here</button>
+            </p>
+        </div>
+    </main>
+
+    <script src="app.js"></script>
+    <script>
+        // Track visual orientation state of form
+        let isLoginMode = true;
+        
+        function toggleAuthMode() {
+            isLoginMode = !isLoginMode;
+            const title = document.getElementById('auth-title');
+            const submitBtn = document.getElementById('auth-submit-btn');
+            const toggleText = document.getElementById('auth-toggle-text');
+            const usernameGroup = document.getElementById('username-group');
+            const usernameInput = document.getElementById('auth-username');
+            const idLabel = document.getElementById('identifier-label');
+
+            if (isLoginMode) {
+                title.textContent = "Login";
+                submitBtn.textContent = "Sign In";
+                toggleText.textContent = "Don't have an account?";
+                idLabel.textContent = "Username or Email";
+                usernameGroup.classList.add('hidden');
+                usernameInput.removeAttribute('required');
+            } else {
+                title.textContent = "Create Account";
+                submitBtn.textContent = "Sign Up";
+                toggleText.textContent = "Already have an account?";
+                idLabel.textContent = "Email Address";
+                usernameGroup.classList.remove('hidden');
+                usernameInput.setAttribute('required', 'true');
+            }
+        }
+
+        async function handleAuthSubmit(e) {
+            e.preventDefault();
+            await processAuthentication(isLoginMode);
+        }
+    </script>
+</body>
+</html>
