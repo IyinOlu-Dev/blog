@@ -7,6 +7,7 @@ def hash_password(password: str) -> str:
 
 def verify_password(plain: str, hashed: str) -> bool:
     try:
-        return ph.verify(plain, hashed)
-    except Exception:
+        return ph.verify(hashed, plain)
+    except Exception as e:
+        print(f"Password verification failed: {e}")
         return False
