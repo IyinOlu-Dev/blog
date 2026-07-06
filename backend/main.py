@@ -22,7 +22,7 @@ origins = []
 
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["https://blog-f1vp.onrender.com",
+    allow_origins=["https://immoran-blog-sulb.onrender.com",
                 "https://immoran-blog-sulb.onrender.com"],
     allow_credentials = True,
     allow_methods=["*"],
