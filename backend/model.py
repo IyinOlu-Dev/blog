@@ -1,6 +1,6 @@
 from decimal import Decimal
 from uuid import UUID
-# import uuid
+import uuid
 from sqlalchemy import Numeric, text, ForeignKey
 from datetime import datetime
 from backend.database import Base
