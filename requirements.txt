@@ -6,3 +6,4 @@ python-dotenv
 python-jose[cryptography]
 argon2-cffi
 pydantic[email]
+uuid
