@@ -1,4 +1,5 @@
 from fastapi import FastAPI, Body, Response, status, HTTPException, Depends
+
 from uuid import UUID
 import time
 from sqlalchemy.orm import Session
@@ -31,7 +32,7 @@ app.add_middleware(
 
 
 @app.get("/", response_model= list[PostHomeResponse])
-def home_page(db: Session = Depends(get_db),
+async def home_page(db: Session = Depends(get_db),
               limit= 10,
               offset= 0):
     limit = min(limit, 50)
@@ -40,7 +41,7 @@ def home_page(db: Session = Depends(get_db),
     return posts
 
 @app.get("/posts", response_model=list[PostResponse])
-def get_posts(db: Session = Depends(get_db),
+async def get_posts(db: Session = Depends(get_db),
                 limit: int = 10,
                 offset: int = 0):
     
@@ -48,7 +49,7 @@ def get_posts(db: Session = Depends(get_db),
     return posts
 
 @app.get("/posts/{id}")
-def get_single_post(id: UUID, db: Session = Depends(get_db)):
+async def get_single_post(id: UUID, db: Session = Depends(get_db)):
     post_query= db.query(PostModel).filter(PostModel.id == id)
     post = post_query.first()
 
@@ -60,7 +61,7 @@ def get_single_post(id: UUID, db: Session = Depends(get_db)):
     return post
 
 @app.post("/posts", status_code=status.HTTP_201_CREATED)
-def create_post(post:PostCreate, 
+async def create_post(post:PostCreate, 
                 db: Session = Depends(get_db),
                 current_user: UserModel= Depends(get_current_user)):
     new_post = PostModel(**post.model_dump(), user_id= current_user.id) 
@@ -70,7 +71,7 @@ def create_post(post:PostCreate,
     return (new_post)
 
 @app.delete("/posts/{id}", status_code=status.HTTP_204_NO_CONTENT)
-def delete_post( id: UUID, 
+async def delete_post( id: UUID, 
                 db: Session = Depends(get_db),
                 current_user: UserModel = Depends(get_current_user)):
     post_query = db.query(PostModel).filter(PostModel.id == id)
@@ -92,7 +93,7 @@ def delete_post( id: UUID,
     return(Response(status_code=status.HTTP_204_NO_CONTENT))
 
 @app.patch("/posts/{id}", status_code=status.HTTP_202_ACCEPTED)
-def update_post(id:UUID, 
+async def update_post(id:UUID, 
                 post_update:PostPatch, 
                 db:Session = Depends(get_db),
                 current_user: UserModel= Depends(get_current_user)):
@@ -116,7 +117,7 @@ def update_post(id:UUID,
     return post_query.first()
 
 @app.post("/post/{id}/like")
-def like_post(id:UUID, 
+async def like_post(id:UUID, 
               db:Session = Depends(get_db),
               current_user: UserModel= Depends(get_current_user)):
     
@@ -147,7 +148,7 @@ def like_post(id:UUID,
 # ----- User Path-----#
 
 @app.post("/new_user", status_code=status.HTTP_201_CREATED, response_model= UserResponse)
-def create_user(post:CreateUser, db: Session = Depends(get_db)):
+async def create_user(post:CreateUser, db: Session = Depends(get_db)):
     user_data = post.model_dump()
     user_data["password"] = hash_password(user_data["password"])
     new_user = UserModel(**user_data)
@@ -159,7 +160,7 @@ def create_user(post:CreateUser, db: Session = Depends(get_db)):
     return (new_user)
 
 @app.post("/login")
-def login(credentials: LoginRequest, db: Session = Depends(get_db)):
+async def login(credentials: LoginRequest, db: Session = Depends(get_db)):
     user = db.query(UserModel).filter(
         (UserModel.email == credentials.identifier ) |(UserModel.username==credentials.identifier)).first()
     
@@ -174,7 +175,7 @@ def login(credentials: LoginRequest, db: Session = Depends(get_db)):
     return {"access_token": token, "token_type": "bearer"}
 
 @app.get("/user/posts/{id}", response_model=UserPosts)
-def get_user_posts_history(id: UUID, 
+async def get_user_posts_history(id: UUID, 
                             db: Session= Depends(get_db),
                             current_user: UserModel= Depends(get_current_user)):
     
@@ -196,7 +197,7 @@ def get_user_posts_history(id: UUID,
     return user
 
 @app.get("/user/me", response_model=UserResponse)
-def get_user_profile(current_user: UserModel= Depends(get_current_user)):
+async def get_user_profile(current_user: UserModel= Depends(get_current_user)):
     
     return current_user
     
