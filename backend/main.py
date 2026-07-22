@@ -48,7 +48,7 @@ async def get_posts(db: Session = Depends(get_db),
     posts = db.query(PostModel).filter(PostModel.published==True).offset(offset).limit(limit).all()
     return posts
 
-@app.get("/posts/{id}")
+@app.get("/posts/{id}", response_model=PostResponse)
 async def get_single_post(id: UUID, db: Session = Depends(get_db)):
     post_query= db.query(PostModel).filter(PostModel.id == id)
     post = post_query.first()
