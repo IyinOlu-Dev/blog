@@ -34,7 +34,7 @@ def get_current_user(token: str = Depends(oauth2_scheme), db: Session= Depends(g
     credentials_exception = HTTPException(
         status_code= status.HTTP_401_UNAUTHORIZED,
         detail= "Could not validate credentials",
-        headers= {"WWW_Authenticate": "Bearer"}
+        headers= {"WWW-Authenticate": "Bearer"}
     )
     
     try:
