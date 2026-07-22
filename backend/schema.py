@@ -29,7 +29,7 @@ class PostHomeResponse(BaseModel):
     def snippet (self) -> str:
         if self.content and len (self.content) > 30:
             return f"{self.content[:30]}..."
-    
+        return self.content or ""
     model_config= {"from_attributes": True}
     
 class PostPatch(BaseModel):
