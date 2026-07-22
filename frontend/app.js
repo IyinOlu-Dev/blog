@@ -104,7 +104,9 @@ async function loadFeed() {
 
         container.innerHTML = posts.map(post => `
             <div class="bg-white p-5 rounded-lg shadow-sm border border-gray-200">
-                <h3 class="text-xl font-bold text-gray-900">${escapeString(post.title)}</h3>
+                <h3 class="text-xl font-bold text-gray-900">
+                    <a href="post.html?id=${post.id}" class="hover:underline hover:text-blue-700 transition">${escapeString(post.title)}</a>
+                </h3>
                 <p class="text-gray-600 mt-2 italic text-sm">Snippet: ${escapeString(post.snippet || "Empty text post body...")}</p>
                 <div class="mt-4 flex justify-between items-center text-xs text-gray-500">
                     <span>Published: ${new Date(post.created_at).toLocaleDateString()}</span>
@@ -121,6 +123,49 @@ async function loadFeed() {
         `).join('');
     } catch (error) {
         container.innerHTML = `<p class="text-red-500 text-center py-4 bg-white rounded shadow-sm">${error.message}</p>`;
+    }
+}
+
+// Fetch and render a single post's full detail
+async function loadPostDetail() {
+    const container = document.getElementById('post-detail-container');
+    if (!container) return;
+
+    const params = new URLSearchParams(window.location.search);
+    const id = params.get('id');
+
+    if (!id) {
+        container.innerHTML = `<p class="text-red-500 text-center py-8 bg-white rounded shadow-sm">No post id was provided.</p>`;
+        return;
+    }
+
+    try {
+        // Target: @app.get("/posts/{id}")
+        const response = await fetch(`${API_BASE_URL}/posts/${id}`);
+        if (response.status === 404) throw new Error("This post could not be found.");
+        if (!response.ok) throw new Error("Could not load this post.");
+        const post = await response.json();
+
+        container.innerHTML = `
+            <div class="bg-white p-6 rounded-lg shadow-sm border border-gray-200">
+                <h2 class="text-2xl font-bold text-gray-900">${escapeString(post.title)}</h2>
+                <div class="mt-1 mb-4 text-xs text-gray-500">Published: ${new Date(post.created_at).toLocaleDateString()}</div>
+                <p class="text-gray-700 whitespace-pre-wrap leading-relaxed">${escapeString(post.content)}</p>
+                <div class="mt-6 flex justify-between items-center border-t pt-4">
+                    <a href="index.html" class="text-blue-600 hover:underline text-sm font-medium">&larr; Back to feed</a>
+                    <div class="flex space-x-2">
+                        <button onclick="handleLikeToggle('${post.id}')" class="bg-blue-50 text-blue-600 px-3 py-1 rounded border border-blue-200 hover:bg-blue-100 transition font-semibold">
+                            ❤️ Like / Unlike
+                        </button>
+                        <button onclick="handlePostDeletion('${post.id}')" class="bg-red-50 text-red-600 px-3 py-1 rounded border border-red-200 hover:bg-red-100 transition font-semibold">
+                            🗑️ Delete
+                        </button>
+                    </div>
+                </div>
+            </div>
+        `;
+    } catch (error) {
+        container.innerHTML = `<p class="text-red-500 text-center py-8 bg-white rounded shadow-sm">${error.message}</p>`;
     }
 }
 
@@ -175,7 +220,11 @@ async function handlePostDeletion(id) {
         if (response.status === 403) throw new Error("Unauthorized action. You do not own this post.");
         if (!response.ok) throw new Error("Could not process post removal.");
 
-        loadFeed();
+        if (document.getElementById('post-detail-container')) {
+            window.location.href = 'index.html';
+        } else {
+            loadFeed();
+        }
     } catch (error) {
         alert(error.message);
     }
@@ -197,7 +246,12 @@ async function handleLikeToggle(id) {
         });
         const data = await response.json();
         alert(data.detail);
-        loadFeed();
+
+        if (document.getElementById('post-detail-container')) {
+            loadPostDetail();
+        } else {
+            loadFeed();
+        }
     } catch (error) {
         alert("Error interacting with like module.");
     }
