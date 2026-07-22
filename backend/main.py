@@ -33,8 +33,8 @@ app.add_middleware(
 
 @app.get("/", response_model= list[PostHomeResponse])
 async def home_page(db: Session = Depends(get_db),
-              limit= 10,
-              offset= 0):
+              limit:  int= 10,
+              offset: int = 0):
     limit = min(limit, 50)
     post_query = select(PostModel).offset(offset).limit(limit)
     posts = db.scalars(post_query).all()
