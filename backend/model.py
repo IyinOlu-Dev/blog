@@ -25,7 +25,7 @@ class UserModel(Base):
     id: Mapped[UUID] =  mapped_column(primary_key= True, index=True, default=uuid.uuid4, unique= True, nullable=False )
     username: Mapped[str | None] = mapped_column(unique=True)
     email: Mapped[str | None] = mapped_column( unique= True)
-    password: Mapped[str | None] = mapped_column(nullable=False)
+    password: Mapped[str] = mapped_column(nullable=False)
     created_at: Mapped[datetime] = mapped_column(server_default=text("now()"))
     posts: Mapped[list["PostModel"]] = relationship("PostModel", back_populates="owner")
     
