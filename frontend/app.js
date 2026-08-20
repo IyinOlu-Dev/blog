@@ -1,5 +1,5 @@
 // Change this variable if your backend host/port changes
-const API_BASE_URL = 'https://olublog.duckdns.org/'; 
+const API_BASE_URL = 'https://olublog.duckdns.org'; 
 
 // Auto-run layout navigation sync on every page load
 document.addEventListener("DOMContentLoaded", syncNavbarView);
