@@ -63,12 +63,16 @@ pip install -r requirements.txt
 Create a `.env` file with your database connection details and JWT secret:
 
 ```
+
+```
 DATABASE_URL=postgresql://user:password@localhost:5432/blog_db
 SECRET_KEY=your-secret-key
 ALGORITHM=HS256
 ACCESS_TOKEN_EXPIRE_MINUTES=30
 ```
 
+
+```
 **Run migrations:**
 
 ```bash
