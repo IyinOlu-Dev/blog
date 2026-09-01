@@ -105,5 +105,4 @@ blog/
 ```
 
 ## License
-
-*(Add a license if you want this to be reusable — MIT is a common default for personal projects.)*
+**MIT**
