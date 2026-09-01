@@ -58,11 +58,9 @@ cd blog
 python -m venv venv
 source venv/bin/activate  # on Windows: venv\Scripts\activate
 pip install -r requirements.txt
-```
+
 
 Create a `.env` file with your database connection details and JWT secret:
-
-```
 
 ```
 DATABASE_URL=postgresql://user:password@localhost:5432/blog_db
@@ -72,7 +70,7 @@ ACCESS_TOKEN_EXPIRE_MINUTES=30
 ```
 
 
-```
+
 **Run migrations:**
 
 ```bash
