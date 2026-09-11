@@ -21,7 +21,8 @@ from fastapi.middleware.cors import CORSMiddleware
 
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["https://olublog.duckdns.org"],
+    allow_origins=["https://olublog.duckdns.org",
+                   "https://blog-f1vp.onrender.com",],
     allow_credentials = True,
     allow_methods=["*"],
     allow_headers=["*"],
