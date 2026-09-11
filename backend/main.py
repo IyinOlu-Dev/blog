@@ -19,8 +19,6 @@ Base.metadata.create_all(bind=engine)
 
 from fastapi.middleware.cors import CORSMiddleware
 
-origins = []
-
 app.add_middleware(
     CORSMiddleware,
     allow_origins=["https://immoran-blog-sulb.onrender.com"],
