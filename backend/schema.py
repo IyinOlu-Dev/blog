@@ -23,6 +23,7 @@ class PostHomeResponse(BaseModel):
     title:str
     content: str = Field(exclude=True)
     created_at: datetime
+    likes: int
     
     @computed_field
     @property
@@ -40,6 +41,7 @@ class PostPatch(BaseModel):
 class PostLikes(BaseModel):
     id: UUID
     user_id : UUID
+    likes: int
     
     model_config= {"from_attributes": True}
         
