@@ -11,7 +11,7 @@ from backend.schema import PostCreate, PostResponse, PostHomeResponse, PostPatch
 from backend.schema import CreateUser, UserResponse, LoginRequest, UserPosts, PostLikes
 from backend.utils import hash_password
 from backend.utils import verify_password
-from backend.oauth import create_acess_token, get_current_user
+from backend.oauth import create_access_token, get_current_user
 
 
 app = FastAPI()
@@ -135,12 +135,12 @@ async def like_post(id:UUID,
     if already_liked:
         db.delete(already_liked)
         db.commit()
-        return {"detail": "Post Sucessfully unliked"}
+        return {"detail": "Post Successfully un-liked"}
     
     new_like = LikedModel(post_id = id, user_id= current_user.id)
     db.add(new_like)
     db.commit()
-    return {"detail": "Post liked sucessfully"}
+    return {"detail": "Post liked successfully"}
 
 # ----- User Path-----#
 
@@ -167,7 +167,7 @@ async def login(credentials: LoginRequest, db: Session = Depends(get_db)):
             detail="Invalid credentials"
         )
     
-    token = create_acess_token(data={"sub": str(user.id)})
+    token = create_access_token(data={"sub": str(user.id)})
         
     return {"access_token": token, "token_type": "bearer"}
 
