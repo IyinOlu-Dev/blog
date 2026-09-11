@@ -36,8 +36,6 @@ class PostPatch(BaseModel):
     title: str | None = None
     content: str | None = None
     published: bool |None = None
-    rating : Optional[Decimal] = Field(default= None, max_digits=4, decimal_places=2 )
-    
     
 class PostLikes(BaseModel):
     id: UUID
