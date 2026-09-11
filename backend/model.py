@@ -14,7 +14,7 @@ class PostModel(Base):
     title: Mapped[str | None]
     content: Mapped[str | None] 
     published: Mapped[bool | None] = mapped_column(server_default=text("false"), default=False)
-    likes: Mapped[int | None]
+    likes: Mapped[int] = mapped_column(server_default=text("0"), default = 0)
     created_at: Mapped[datetime] = mapped_column(server_default=text("now()"))
     user_id: Mapped[UUID] = mapped_column(ForeignKey("user_table.id"), nullable =False, index=True)
     owner: Mapped["UserModel"] = relationship("UserModel", back_populates="posts")
