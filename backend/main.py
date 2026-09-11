@@ -141,8 +141,8 @@ async def like_post(id:UUID,
     
     new_like = LikedModel(post_id = id, user_id= current_user.id)
     db.add(new_like)
-    db.commit()
     post.likes +=1
+    db.commit()
     return {"detail": "Post liked successfully"}
 
 # ----- User Path-----#
